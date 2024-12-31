@@ -1,11 +1,11 @@
-import { useReducer, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import Form from "./components/Form";
-import { activityReducer, initialState } from "./reducers/activity-reducer";
 import ActivityList from "./components/ActivityList";
 import CalorieTracker from "./components/CalorieTracker";
+import { useActivity } from "./hooks/useActivity";
 
 function App() {
-  const [state, dispatch] = useReducer(activityReducer, initialState);
+  const { state, dispatch } = useActivity();
 
   //Save my activities in the local storage, now on activity-reducer I'll show the activities saved in local storage
   useEffect(() => {
@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-      <header className="bg-slate-800 py-3 px-5">
+      <header id="navbar" className="bg-slate-800 py-3 px-5">
         <section className="max-w-4xl mx-auto flex justify-between items-center">
           <h1 className="text-center text-lg text-white uppercase font-bold">
             Calorie tracker
@@ -42,18 +42,18 @@ function App() {
 
       <section className="bg-lime-400 py-10 px-5">
         <div className="max-w-4xl mx-auto">
-          <Form state={state} dispatch={dispatch} />
+          <Form />
         </div>
       </section>
 
       <section className="bg-slate-800 py-10 text-white">
-        <div className="max-w-4xl mx-auto">
-          <CalorieTracker activities={state.activities} />
+        <div className="max-w-4xl mx-auto px-5">
+          <CalorieTracker  />
         </div>
       </section>
 
       <section className="p-10 mx-auto max-w-4xl">
-        <ActivityList activities={state.activities} dispatch={dispatch} />
+        <ActivityList/>
       </section>
     </>
   );

@@ -3,13 +3,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { categories } from "../data/categories";
 import { Activity } from "../types";
-import { ActivityActions, ActivityState } from "../reducers/activity-reducer";
-
-type FormProps = {
-  state: ActivityState;
-  //The type for our dispatch will be our custom type ActivityActions
-  dispatch: React.Dispatch<ActivityActions>;
-};
+import { useActivity } from "../hooks/useActivity";
 
 const initialState: Activity = {
   id: uuidv4(),
@@ -18,7 +12,9 @@ const initialState: Activity = {
   calories: 0,
 };
 
-function Form({ dispatch, state }: FormProps) {
+function Form() {
+  const { state, dispatch } = useActivity();
+
   //Define the object state for my form fields and assign them a my initialState
   const [activity, setActivity] = useState<Activity>(initialState);
 

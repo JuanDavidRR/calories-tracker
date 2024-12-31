@@ -1,23 +1,11 @@
-import { useMemo } from "react";
 import { Activity } from "../types";
-import { categories } from "../data/categories";
 //Import from npm i @heroicons/react
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { useActivity } from "../hooks/useActivity";
 
-import { ActivityActions } from "../reducers/activity-reducer";
-
-type ActivityListProps = {
-  activities: Activity[];
-  dispatch: React.Dispatch<ActivityActions>;
-};
-
-function ActivityList({ activities, dispatch }: ActivityListProps) {
-  //Derivated state to check if the activities array is empty
-  const isEmptyActivities = useMemo(
-    () => activities.length === 0,
-    [activities]
-  );
+function ActivityList() {
+  const { state, dispatch, isEmptyActivities, categoryName } = useActivity();
 
   //Function to delete an activity
   const handleDelete = (id: Activity["id"]) => {
@@ -32,15 +20,12 @@ function ActivityList({ activities, dispatch }: ActivityListProps) {
       type: "set-activeId",
       payload: { id },
     });
+
+    // Scroll to the form section
+    const formElement = document.getElementById("navbar");
+    formElement?.scrollIntoView({ behavior: "smooth" });
   };
 
-  //Function to get the category name based from the id
-  const categoryName = useMemo(
-    () => (category: Activity["category"]) =>
-      //If the actitivy name is equal to 1, the function will map the categories and find the category with the same id (1), and then, will return the name (food)
-      categories.map((cat) => cat.id === category && cat.name),
-    []
-  );
   return (
     <>
       {isEmptyActivities ? (
@@ -55,7 +40,7 @@ function ActivityList({ activities, dispatch }: ActivityListProps) {
           <h2 className="text-4xl font-black text-slate-950 text-center">
             Food and activities
           </h2>
-          {activities.map((activity) => (
+          {state.activities.map((activity) => (
             <section
               key={activity.id}
               className="px-5 py-10 bg-white mt-5 flex justify-between shadow-lg rounded-lg"
